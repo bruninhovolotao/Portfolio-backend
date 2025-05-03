@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String   @db.VarChar(50)
+  email     String   @unique @db.VarChar(100)
+  username  String   @unique @db.VarChar(50)
+  senha     String   @db.VarChar(255)
+  criadoEm  DateTime @default(now()) @map("criado_em")
+  authToken String?
+
+  projetos Projeto[]
+  Blog     Blog[]
+
+  @@map("usuarios")
+}
+
+model Projeto {
+  id        Int     @id @default(autoincrement())
+  titulo    String  @db.VarChar(100)
+  descricao String? @db.Text
+  conteudo  String? @db.Text
+  thumbnail String? @db.VarChar(255)
+
+  categoria String   @db.VarChar(50)
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@map("projetos")
+}
+
+model Blog {
+  id        Int     @id @default(autoincrement())
+  titulo    String  @db.VarChar(100)
+  descricao String? @db.Text
+  conteudo  String? @db.Text
+  thumbnail String? @db.VarChar(255)
+
+  categoria String   @db.VarChar(50)
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@map("blog")
+}
