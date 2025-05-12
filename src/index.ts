@@ -2,8 +2,11 @@ import express from 'express';
 import {loginRoutes} from "../src/routes/login.routes";
 import { projetoRoutes } from "./routes/projeto.routes";
 import { blogRoutes } from './routes/blog.routes';
+import cors from "cors";
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json())
 
