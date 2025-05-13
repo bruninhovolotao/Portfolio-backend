@@ -3,10 +3,11 @@ import { ProjetoService } from "../service/projetos.service";
 import { onError } from "../utils/on-error";
 import { HTTPError } from "../utils/http.error";
 import { prismaClient } from "../database/prisma.client";
+import { json } from "stream/consumers";
 
 export class ProjetoController {
 
-    public async criar(req: Request, res: Response): Promise<void> {
+  public async criar(req: Request, res: Response): Promise<void> {
     try {
       const { titulo, descricao, categoria, conteudo, thumbnail } = req.body;
 
@@ -31,6 +32,23 @@ export class ProjetoController {
       return onError(error, res);
     }
   }
+
+  public async listar(req: Request, res: Response): Promise<void>{
+    try {
+      const service = new ProjetoService();
+
+      const projeto = await service.listarProjeto();
+
+      res.status(200).json({
+        sucess: true,
+        message: "Projetos listados com sucesso.",
+        data: projeto
+      });
+
+    } catch (error) {
+      return onError(error, res)
+    }
+}
 
   public async atualizar(req: Request, res: Response): Promise<void>{
     try {

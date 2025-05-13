@@ -1,5 +1,5 @@
 import { prismaClient } from "../database/prisma.client";
-import { CriarProjetoDTO } from "../dto/projetos.dto";
+import { CriarProjetoDTO, ProjetoDTO } from "../dto/projetos.dto";
 import { Projeto } from "@prisma/client";
 import { HTTPError } from "../utils/http.error";
 
@@ -18,6 +18,27 @@ export class ProjetoService {
 
         return novoProjeto
     }
+
+    public async listarProjeto(): Promise<ProjetoDTO[]> {
+  const listarProjetos = await prismaClient.projeto.findMany({
+    select: {
+      id: true,
+      titulo: true,
+      descricao: true,
+      conteudo: true,
+      categoria: true,
+      thumbnail: true,
+      usuario: {
+        select: {
+          id: true,
+          nome: true,
+        },
+      },
+    }
+  }); 
+  return listarProjetos;
+}
+
 
     public async atualizarProjeto(projetoId: number, usuarioId: number, dados: Partial<CriarProjetoDTO>): Promise<Projeto>{
         const projeto = await prismaClient.projeto.findUnique({

@@ -9,6 +9,7 @@ export class projetoRoutes{
 
         const controller = new ProjetoController();
 
+        router.get("/projetos", controller.listar);
         router.post("/projetos", autenticarToken, controller.criar);
         router.put("/projetos/:id", autenticarToken, controller.atualizar);
         router.delete("/projetos/:id", autenticarToken, controller.deletar);
