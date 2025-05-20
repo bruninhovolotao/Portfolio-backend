@@ -48,6 +48,9 @@ export class ProjetoService {
                 nome: true,
                 },
             },
+            },
+            orderBy: {
+                criadoEm: 'desc'
             }
         }); 
         return listarProjetos;
